@@ -1,0 +1,14 @@
+{
+  "name": "make",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "277snippet-cli": "^1.0.7"
+  }
+}
