@@ -20,30 +20,39 @@ const __dirname = dirname(__filename);
 
 // Function to ensure the file exists in the project root directory
 const ensureFileExists = (fileName) => {
-  const projectRoot = process.cwd(); // Get the project's root directory
-  const targetFilePath = path.join(projectRoot, fileName);
-  console.log(`Ensuring file exists at: ${targetFilePath}`);
-  if (!fs.existsSync(targetFilePath)) {
-    let sourceFilePath;
-    if (fileName.endsWith("Ufields.md")) {
-      sourceFilePath = path.join(__dirname, "fields.md");
-    } else if (fileName.endsWith("Usnippets.md")) {
-      sourceFilePath = path.join(__dirname, "snippets.md");
-    }
+  try {
+    const projectRoot = process.cwd();
+    const targetFilePath = path.join(projectRoot, fileName);
+    console.log(`Ensuring file exists at: ${targetFilePath}`);
 
-    if (sourceFilePath && targetFilePath) {
-      fs.copyFileSync(sourceFilePath, targetFilePath);
-      console.log(chalk.green(`File ${fileName} created at ${targetFilePath}`));
-    } else {
-      console.error(chalk.redBright(`Error while creating ${fileName}`));
+    if (!fs.existsSync(targetFilePath)) {
+      let sourceFilePath;
+      if (fileName.endsWith("Ufields.md")) {
+        sourceFilePath = path.join(__dirname, "fields.md");
+      } else if (fileName.endsWith("Usnippets.md")) {
+        sourceFilePath = path.join(__dirname, "snippets.md");
+      }
+
+      if (sourceFilePath && targetFilePath) {
+        try {
+          fs.copyFileSync(sourceFilePath, targetFilePath);
+          console.log(chalk.green(`File ${fileName} created at ${targetFilePath}`));
+        } catch (copyErr) {
+          console.error(chalk.redBright(`Error copying file: ${copyErr.message}`));
+        }
+      } else {
+        console.error(chalk.redBright(`Source or target file path not defined`));
+      }
     }
+  } catch (err) {
+    console.error(chalk.redBright(`Error ensuring file existence: ${err.message}`));
   }
 };
 
 const fsSearchField = async (answersSoFar, input) => {
   ensureFileExists("Ufields.md");
 
-  const projectRoot = process.cwd(); // Get the project's root directory
+  const projectRoot = process.cwd();
   const filePath = path.join(projectRoot, "Ufields.md");
 
   return new Promise((resolve, reject) => {
@@ -68,7 +77,7 @@ const fsSearchSnippet = async (fieldvalue, input) => {
   ensureFileExists("Usnippets.md");
   ensureFileExists("Ufields.md");
 
-  const projectRoot = process.cwd(); // Get the project's root directory
+  const projectRoot = process.cwd();
   const filePath = path.join(projectRoot, "Usnippets.md");
 
   return new Promise((resolve, reject) => {
@@ -99,7 +108,7 @@ const fsSearchSnippet = async (fieldvalue, input) => {
 const findSnippetCode = async (subfield) => {
   ensureFileExists("Usnippets.md");
 
-  const projectRoot = process.cwd(); // Get the project's root directory
+  const projectRoot = process.cwd();
   const filePath = path.join(projectRoot, "Usnippets.md");
 
   return new Promise((resolve, reject) => {
@@ -133,7 +142,7 @@ const findSnippetCode = async (subfield) => {
 };
 
 const resetProgram = () => {
-  const projectRoot = process.cwd(); // Get the project's root directory
+  const projectRoot = process.cwd();
   const targetFiles = [
     path.join(projectRoot, "Usnippets.md"),
     path.join(projectRoot, "Ufields.md"),
